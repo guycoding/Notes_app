@@ -1,27 +1,43 @@
-import { AuthProvider } from "@/lib/auth-context";
-import { Background } from "@react-navigation/elements";
-import { Stack,useFocusEffect,useRouter } from "expo-router";
-import { useEffect, useRef } from "react";
-function RoutGouard ({children}:{children: React.ReactNode}){
-  const router = useRouter()
-  const isAuth = false; 
-  useFocusEffect(()=> {
-    if(!isAuth){
-        router.replace("/auth")
-  } 
+import { AuthProvider, useAuth } from "@/lib/auth-context";
+import { Stack, useFocusEffect, useRouter, useSegments } from "expo-router";
+import { PaperProvider } from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
+function RoutGouard({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const { user, isLoadingUser } = useAuth();
+  const segments = useSegments();
+
+  useFocusEffect(() => {
+    const inAuthGroup = segments[0] === "auth";
+    if (!user && !inAuthGroup && !isLoadingUser) {
+      router.replace("/auth");
+    } else if (user && inAuthGroup && !isLoadingUser) {
+      router.replace("/");
+    }
   });
-  return <>{children}</>
+  return <>{children}</>;
 }
 
 export default function RootLayout() {
-  return(
+  return (
     <AuthProvider>
-    <RoutGouard>
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{headerShown:false }}/>  
-       <Stack.Screen name="auth" options={{headerStyle:{backgroundColor: "#f4511e"},headerTitleAlign:'center',title:"Login Page"}}   />
-    </Stack>
-    </RoutGouard>
+      <PaperProvider>
+      <SafeAreaProvider>
+        <RoutGouard>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="auth"
+              options={{
+                headerTitleAlign: "center",
+                title: "",
+              }}
+            />
+          </Stack>
+        </RoutGouard>
+      </SafeAreaProvider>
+      </PaperProvider>
     </AuthProvider>
-  )
+  );
 }

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const login = () => {
+const streaksScreen = () => {
   return (
     <View>
       <Text>hello this a login page</Text>
@@ -9,6 +9,6 @@ const login = () => {
   )
 }
 
-export default login
+export default streaksScreen;
 
 const styles = StyleSheet.create({})
