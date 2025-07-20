@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import { Client, Account, ID, Models, Databases } from 'react-native-appwrite';
 import React, { useState } from 'react';
 
-let client: Client;
+export let client: Client;
 export let account: Account;
 export let database: Databases;
 
@@ -17,3 +17,7 @@ client
 export const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DB_ID!
 export const HABBITS_ID = process.env.EXPO_PUBLIC_APPWRITE_HABBITS_COLLECTION_ID!
 
+export interface RealtimeResponse{
+  events:string[];
+  payload:any;
+}
